@@ -30,7 +30,7 @@
     // 创建时间对象
     // date,表示时间的对象(date，字符串，数字)
     // 是否需要去 时分秒毫秒
-    function create(date, isWipe) {
+    function parse(date, isWipe) {
         if (typeof date == "boolean") {
             isWipe = date;
             date = null;
@@ -76,8 +76,8 @@
     // 格式化日期
     // formatStr为格式化日期
     var parseArr = "YYYY,YY,MM,M,DD,D,hh,h,mm,m,ss,s,w,W,X".split(",");
-    function parse(date, formatStr) {
-        date = create(date);
+    function get(date, formatStr) {
+        date = parse(date);
         var YYYY = date.getFullYear();
         var YY = date.getYear();
         var M = date.getMonth() + 1;
@@ -93,10 +93,11 @@
         var w = date.getDay();
         var W = weekDayArr[w];
 
-        var diff = wipeOut(date, true).getTime() - create(true).getTime();
+        var diff = wipeOut(date, true).getTime() - parse(true).getTime();
         var X = diff == 86400000 ? "明天" : diff == 0 ? "今天" : W;
 
         return format(formatStr, parseArr, {
+            date: date,
             YYYY: YYYY,
             YY: YY,
             MM: MM,
@@ -117,13 +118,13 @@
 
     // 时间间隔差
     var diffIntervalArr = "D,ms,h,m,s".split(",");
-    function diffInterval(num, formatStr) {
+    function diff(num, formatStr) {
         if (typeof num != "number") {
-            num = create(num).getTime() - create(formatStr).getTime();
+            num = parse(num).getTime() - parse(formatStr).getTime();
             formatStr = arguments[2];
         }
-
-        var mm = num;
+        
+        var mm = Math.abs(num);
         // 毫秒
         var ms = mm % 1000;
         // 秒
@@ -151,7 +152,7 @@
         h: 60 * 60 * 1000,
         d: 24 * 60 * 60 * 1000
     };
-    function appendTime(n, date, formatStr) {
+    function append(n, date, formatStr) {
         if (typeof n == "string") {
             if (/^(-?\d+)([a-z])$/i.test(n)) {
                 n = RegExp.$1 * (appendTimeOpt[RegExp.$2.toLowerCase()] || 0);
@@ -160,10 +161,17 @@
             }
         }
 
-        var val = new Date(create(date).getTime() + n);
+        var val = new Date(parse(date).getTime() + n);
         if (formatStr) {
             return parse(val, formatStr);
         }
         return val;
     }
+
+    return {
+        parse: parse,
+        get: get,
+        diff: diff,
+        append: append
+    };
 });
