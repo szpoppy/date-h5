@@ -116,7 +116,7 @@ dateFn.get(new Date(), "MM-DD X");
     -   -1s 减少 1 秒钟
 -   n:Number
     -   增加的毫秒数
--   date 日期格式的字符串 毫秒数数字 或者日期
+-   date 日期格式的字符串 毫秒数字 或者日期
 -   formatStr 将日期详情格式化为字符串形式（如果为空，返回为 Date）
 
 ```javascript
