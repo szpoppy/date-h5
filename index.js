@@ -62,7 +62,7 @@
             // 无格式化字符串
             return info
         }
-        str = str.replace(/\[#(\w+):(.*?)\]/g, function(s0, s1, s2) {
+        str = str.replace(/<(\w+):(.*?)>/g, function(s0, s1, s2) {
             var val = info[s1]
             if (val) {
                 return val + s2
