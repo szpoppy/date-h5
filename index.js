@@ -116,8 +116,8 @@
             s: s,
             w: w,
             W: W,
-            EW:EW,
-            FW:FW,
+            EW: EW,
+            FW: FW,
             X: X
         })
     }
@@ -169,7 +169,7 @@
 
         var val = new Date(parse(date).getTime() + n)
         if (formatStr) {
-            return parse(val, formatStr)
+            return get(val, formatStr)
         }
         return val
     }
