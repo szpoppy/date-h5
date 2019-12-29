@@ -21,19 +21,19 @@
 
 ```javascript
 // 获取客户端时间
-dateFn.parse();
+dateFn.parse()
 
 // 获取客户端时间，并只保留 年月日
-dateFn.parse(true);
+dateFn.parse(true)
 
 // 将字符串格式化为时间
-dateFn.parse("2019-09-27 10:10:10");
+dateFn.parse("2019-09-27 10:10:10")
 
 // 将字符串格式化为时间,并只保留年月日
-dateFn.parse("2019-09-27 10:10:10", true);
+dateFn.parse("2019-09-27 10:10:10", true)
 
 // 将数字转换为时间
-dateFn.parse(1569549173461);
+dateFn.parse(1569549173461)
 ```
 
 ### 获取时间详情
@@ -64,13 +64,13 @@ dateFn.parse(1569549173461);
 
 ```javascript
 // 获取客户端时间详情
-dateFn.get();
+dateFn.get()
 
 // 获取客户端时间格式化为 2019-09-27
-dateFn.get(new Date(), "YYYY-MM-DD");
+dateFn.get(new Date(), "YYYY-MM-DD")
 
 // 获取客户端时间格式化为 09-27 周五(今天 明天)
-dateFn.get(new Date(), "MM-DD X");
+dateFn.get(new Date(), "MM-DD X")
 ```
 
 ### 计算两时间的时差
