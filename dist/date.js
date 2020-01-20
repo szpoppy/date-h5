@@ -1,14 +1,16 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+(function (global, factory) {
+    // UMD 加载方案
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = factory();
+        return;
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    if (typeof global.define === "function" && global.define.amd) {
+        global.define(factory);
+        return;
     }
-})(function (require, exports) {
+    global.dateFn = factory();
+})(window, function () {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
     // 星期几 中文
     var weekDayArr = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
     var weekDayArrE = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
@@ -24,29 +26,46 @@
         return new Date(t);
     }
     // 创建时间对象
+    // 时区适配
     function parse(date, isWipe) {
         if (typeof date == "boolean") {
             isWipe = date;
             date = undefined;
         }
+        if (!date) {
+            // 返回当前时间
+            return new Date();
+        }
         // 日期
         if (date instanceof Date) {
             return wipeOut(date, isWipe);
         }
-        if (typeof date == "string") {
-            date = date
-                .replace(/^(\d{4})(\d{2})(\d{2})(\d{2})?(\d{2})?(\d{2})?$/, function (str, Y, M, D, h, m, s) {
-                return Y + "/" + M + "/" + D + " " + (h || "00") + ":" + (m || "00") + ":" + (s || "00");
-            })
-                .replace(/\-/g, "/")
-                .replace(/T/, " ")
-                .replace(/\.\d+$/, "");
+        // 时间戳
+        if (typeof date == "number") {
+            return wipeOut(new Date(date), isWipe);
         }
+        var gmt = "";
+        date = date.trim().replace(/\s*GMT(?:[+-]\d{1,4})?$/i, function (match) {
+            gmt = " " + match.trim().toUpperCase();
+            return "";
+        });
+        if (/^\d{13,}$/.test(date)) {
+            date = parseInt(date);
+            if (gmt) {
+                return parse(get(date, "YYYY/MM/DD hh:mm:ss") + gmt, isWipe);
+            }
+            return wipeOut(new Date(date), isWipe);
+        }
+        date = date
+            .replace(/^(\d{4})(\d{2})(\d{2})(\d{2})?(\d{2})?(\d{2})?$/, function (str, Y, M, D, h, m, s) {
+            return Y + "/" + M + "/" + D + " " + (h || "00") + ":" + (m || "00") + ":" + (s || "00");
+        })
+            .replace(/\-/g, "/")
+            .replace(/T/, " ")
+            .replace(/\.\d+$/, "");
         // 防止报错
-        var x = date;
-        return wipeOut(x, isWipe);
+        return wipeOut(new Date(date + gmt), isWipe);
     }
-    exports.parse = parse;
     // 格式化
     function format(str, arr, info) {
         if (arr === void 0) { arr = []; }
@@ -73,6 +92,18 @@
     function get(date, formatStr) {
         if (formatStr === void 0) { formatStr = ""; }
         var theDate = parse(date);
+        var tZone = 0;
+        formatStr = formatStr.replace(/^([+-]\d+)([hm]):/i, function (match, n, uni) {
+            tZone = parseInt(n);
+            if (uni == "h") {
+                tZone *= 60;
+            }
+            return "";
+        });
+        if (tZone) {
+            // 设置为要求时区的时间
+            theDate.setMinutes(theDate.getTimezoneOffset() + tZone + theDate.getMinutes());
+        }
         var YYYY = theDate.getFullYear();
         var YY = YYYY - 1900;
         var M = theDate.getMonth() + 1;
@@ -112,9 +143,8 @@
             X: X
         });
     }
-    exports.get = get;
     // 时间间隔差
-    exports.diffIntervalArr = "D,ms,h,m,s".split(",");
+    var diffIntervalArr = "D,ms,h,m,s".split(",");
     function diff(arg1, arg2, arg3) {
         var num;
         var formatStr;
@@ -133,7 +163,7 @@
         mm = Math.floor(mm / 60);
         var h = mm % 24;
         var D = Math.floor(mm / 24);
-        return format(formatStr, exports.diffIntervalArr, {
+        return format(formatStr, diffIntervalArr, {
             D: D,
             ms: ms,
             h: h,
@@ -141,7 +171,6 @@
             s: s
         });
     }
-    exports.diff = diff;
     // 日期上增加特定时间
     var appendTimeOpt = {
         s: 1000,
@@ -166,8 +195,7 @@
         }
         return val;
     }
-    exports.append = append;
-    exports.default = {
+    return {
         parse: parse,
         get: get,
         diff: diff,

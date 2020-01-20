@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
+        "declaration": true,
         "sourceMap": true,
         "target": "es5",
-        "module": "UMD",
+        "module": "CommonJS",
         "outDir": "dist",
         "experimentalDecorators": true,
         "lib": ["es2016", "dom"],

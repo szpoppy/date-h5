@@ -14,9 +14,15 @@
 
 ### 转换为时间对象
 
-> dateFn.parse([date:String;Number;Date, isWipe:Boolean]):Date
+> dateFn.parse(date:String;Number;Date, isWipe:Boolean = false):Date
 
 -   date 日期格式的字符串 毫秒数数字 或者日期
+-   isWipe 是否只保留年月日
+-   date 字符串后面根 GMT 表示格式化为指定时区的日期
+
+> dateFn.parse(isWipe:Boolean = false):Date
+
+-   获取当前时间
 -   isWipe 是否只保留年月日
 
 ```javascript
@@ -28,17 +34,22 @@ dateFn.parse(true)
 
 // 将字符串格式化为时间
 dateFn.parse("2019-09-27 10:10:10")
+// 这个时间为东8区的时间转化为本地时间
+dateFn.parse("2019-09-27 10:10:10 GMT+0800")
 
 // 将字符串格式化为时间,并只保留年月日
 dateFn.parse("2019-09-27 10:10:10", true)
 
 // 将数字转换为时间
 dateFn.parse(1569549173461)
+// GMT前面的也会自动转换为数字
+dateFn.parse("1569549173461 GMT")
+
 ```
 
 ### 获取时间详情
 
-> dateFn.get([date:String;Number;Date, formatStr:String]):Object;String
+> dateFn.get(date?:String;Number;Date, formatStr:String = ""):Object;String
 
 -   date 日期格式的字符串 毫秒数数字 或者日期
 -   formatStr 将日期详情格式化为字符串形式
@@ -71,6 +82,10 @@ dateFn.get(new Date(), "YYYY-MM-DD")
 
 // 获取客户端时间格式化为 09-27 周五(今天 明天)
 dateFn.get(new Date(), "MM-DD X")
+
+// 将时间转化为东八区时间后，再格式化
+dateFn.get(new Date(), "+8h:MM-DD X") // 返回字符串
+dateFn.get(new Date(), "+8h:") // 返回对象
 ```
 
 ### 计算两时间的时差
