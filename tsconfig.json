@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "es5",
+        "module": "UMD",
+        "outDir": "dist",
+        "experimentalDecorators": true,
+        "lib": ["es2016", "dom"],
+        "types": []
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}
