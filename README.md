@@ -2,6 +2,8 @@
 
 时间格式化
 
+> 使用 CommonJS，不支持直接在 html 中引用，请使用webpak加载
+
 ## 安装
 
 > npm i date-h5 --save
@@ -44,7 +46,6 @@ dateFn.parse("2019-09-27 10:10:10", true)
 dateFn.parse(1569549173461)
 // GMT前面的也会自动转换为数字
 dateFn.parse("1569549173461 GMT")
-
 ```
 
 ### 获取时间详情
