@@ -2,7 +2,7 @@
 
 时间格式化
 
-> 使用 CommonJS，不支持直接在 html 中引用，请使用webpak加载
+> 使用 CommonJS，不支持直接在 html 中引用，请使用 webpack
 
 ## 安装
 

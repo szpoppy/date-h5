@@ -204,4 +204,4 @@ exports.default = {
     diff: diff,
     append: append
 };
-//# sourceMappingURL=date.js.map
+//# sourceMappingURL=index.js.map

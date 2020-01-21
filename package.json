@@ -1,8 +1,8 @@
 {
     "name": "date-h5",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "日期字符串格式化",
-    "main": "dist/date.js",
+    "main": "dist/index.js",
     "scripts": {
         "build": "rm -rf ./dist && tsc"
     },
